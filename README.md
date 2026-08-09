@@ -1,20 +1,20 @@
 # Classroom Management
 
-Ứng dụng quản lý lớp học gồm backend Express, frontend React và dữ liệu lưu trên Firebase Firestore.
+A full-stack classroom management application built with an Express backend, a React frontend, Firebase Firestore, Twilio SMS, email verification, and Socket.io chat.
 
-Tài liệu chi tiết cho từng phần:
+Detailed documentation:
 
-- [README backend](./backend/README.md)
-- [README frontend](./frontend/README.md)
+- [Backend README](./backend/README.md)
+- [Frontend README](./frontend/README.md)
 
-## Công nghệ sử dụng
+## Tech Stack
 
 - Frontend: React, Vite, Axios, Socket.io Client
 - Backend: Node.js, Express, Socket.io
 - Database: Firebase Firestore
-- Notification: Twilio SMS, Nodemailer email
+- Notifications: Twilio SMS, Nodemailer email
 
-## Cấu trúc project
+## Project Structure
 
 ```text
 classroom-management/
@@ -48,17 +48,17 @@ classroom-management/
 `-- README.md
 ```
 
-Backend được tổ chức theo hướng Modular Monolith kết hợp Layered Architecture:
+The backend follows a Modular Monolith style with a layered flow:
 
 ```text
 router -> controller -> service -> repository -> Firebase
 ```
 
-## Cách chạy project
+## How To Run
 
-### 1. Chuẩn bị backend env
+### 1. Configure Backend Environment
 
-Tạo file `backend/.env` dựa theo `backend/.env.example`.
+Create `backend/.env` from `backend/.env.example`.
 
 ```env
 PORT=4000
@@ -80,9 +80,9 @@ EMAIL_PASS=
 EMAIL_FROM=
 ```
 
-Nếu Twilio hoặc email chưa cấu hình được thì app vẫn có fallback để test local.
+Twilio and email credentials are optional for local testing. If sending fails, the backend still keeps the authentication flow testable by returning a development access code.
 
-### 2. Chạy backend
+### 2. Run Backend
 
 ```bash
 cd backend
@@ -91,15 +91,15 @@ npm run seed
 npm run dev
 ```
 
-Backend chạy ở:
+Backend URL:
 
 ```text
 http://localhost:4000
 ```
 
-### 3. Chạy frontend
+### 3. Run Frontend
 
-Mở terminal khác:
+Open another terminal:
 
 ```bash
 cd frontend
@@ -107,92 +107,82 @@ npm install
 npm run dev
 ```
 
-Frontend chạy ở:
+Frontend URL:
 
 ```text
 http://localhost:5173
 ```
 
-## Tài khoản demo
+## Demo Accounts
 
-Instructor:
+Instructor login:
 
 ```text
 +15550000001
 ```
 
-Student:
+Student email login:
 
 ```text
 mia@classroom.local
 ```
 
-## Một số màn hình chính
+## Screenshots
 
-Các ảnh nằm trong thư mục `screenshots/`.
+Screenshots are stored in the `screenshots/` folder.
 
-### Đăng nhập bằng số điện thoại
+### Phone Login
 
 ![Phone login](./screenshots/01-phone-login.png)
 
-### Nhập mã xác thực điện thoại
+### Phone Verification
 
 ![Phone verification](./screenshots/02-phone-verification.png)
 
-### Đăng nhập bằng email
+### Email Login
 
 ![Email login](./screenshots/03-email-login.png)
 
-### Nhập mã xác thực email
+### Email Verification
 
 ![Email verification](./screenshots/04-email-verification.png)
 
-### Trang quản lý học sinh của instructor
+### Instructor Student Management
 
 ![Instructor students](./screenshots/05-instructor-students.png)
 
-### Form thêm học sinh
+### Add Student Form
 
 ![Add student](./screenshots/06-add-student.png)
 
-### Trang giao bài học
+### Instructor Lesson Assignment
 
 ![Instructor lessons](./screenshots/07-instructor-lessons.png)
 
-### Chat phía instructor
+### Instructor Chat
 
 ![Instructor chat](./screenshots/08-instructor-chat.png)
 
-### Trang bài học của student
+### Student Lessons
 
 ![Student lessons](./screenshots/09-student-lessons.png)
 
-### Chat phía student
+### Student Chat
 
 ![Student chat](./screenshots/10-student-chat.png)
 
-## Chạy nhanh nếu đã cài package
+## Quick Start After Packages Are Installed
 
-Mở 2 terminal riêng.
-
-Terminal backend:
+Backend:
 
 ```bash
 cd backend
-npm install
 npm run dev
 ```
 
-Terminal frontend:
+Frontend:
 
 ```bash
 cd frontend
-npm install
 npm run dev
-```
-
-Sau đó mở:
-
-```text
-http://localhost:5173
 ```

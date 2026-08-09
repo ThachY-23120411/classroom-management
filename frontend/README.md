@@ -1,8 +1,8 @@
 # Frontend
 
-Frontend được làm bằng React + Vite. Giao diện gồm các màn đăng nhập, dashboard của instructor, dashboard của student, lesson và chat realtime.
+This is the React + Vite frontend for the Classroom Management application. It includes access-code login screens, instructor and student dashboards, lesson management, profile editing, and realtime chat.
 
-## Công nghệ dùng trong frontend
+## Tech Stack
 
 - React
 - Vite
@@ -10,7 +10,7 @@ Frontend được làm bằng React + Vite. Giao diện gồm các màn đăng n
 - Socket.io Client
 - Lucide React
 
-## Cấu trúc chính
+## Main Structure
 
 ```text
 frontend/
@@ -23,34 +23,34 @@ frontend/
 `-- vite.config.js
 ```
 
-Hiện tại UI nằm chủ yếu trong `src/App.jsx`, CSS nằm trong `src/App.css`. Vì scope bài challenge không quá lớn nên mình giữ frontend gọn, dễ đọc và dễ sửa.
+The main UI is implemented in `src/App.jsx`, and the styling is in `src/App.css`.
 
-## Cài đặt
+## Installation
 
 ```bash
 cd frontend
 npm install
 ```
 
-## Chạy frontend
+## Run Frontend
 
 ```bash
 npm run dev
 ```
 
-Sau đó mở:
+Open:
 
 ```text
 http://localhost:5173
 ```
 
-Frontend đang gọi backend ở:
+The frontend expects the backend to run at:
 
 ```text
 http://localhost:4000
 ```
 
-Vì vậy trước khi test web thì nên chạy backend trước.
+Start the backend before testing the full app.
 
 ## Build
 
@@ -64,27 +64,26 @@ npm run build
 npm run lint
 ```
 
-## Các màn hình đã làm
+## Implemented Screens
 
-- Đăng nhập bằng số điện thoại
-- Xác thực mã điện thoại
-- Đăng nhập bằng email
-- Xác thực mã email
-- Instructor quản lý danh sách student
-- Thêm, sửa, xóa student
-- Instructor giao lesson cho student
-- Student xem lesson và đánh dấu hoàn thành
-- Instructor chat với student
-- Student chat với instructor của mình
+- Phone login
+- Phone verification
+- Email login
+- Email verification
+- Instructor student management
+- Add, edit, and delete student
+- Instructor lesson assignment
+- Student lesson list and completion action
+- Instructor-student chat
 - Logout
 
-## Luồng đăng nhập
+## Login Flow
 
-Instructor đăng nhập bằng số điện thoại. Sau khi nhập số điện thoại, backend tạo mã access code, lưu vào Firebase và thử gửi SMS qua Twilio.
+Instructors log in with a phone number. After the phone number is submitted, the backend creates an access code, stores it in Firebase, and tries to send it through Twilio.
 
-Student có thể đăng nhập bằng email. Backend tạo mã access code, lưu vào Firebase và gửi qua email nếu cấu hình SMTP hợp lệ.
+Students can log in with email. The backend creates an access code, stores it in Firebase, and sends it by email if SMTP is configured.
 
-Tài khoản test:
+Demo accounts:
 
 ```text
 Instructor:
@@ -99,18 +98,19 @@ casey@classroom.local
 riley@classroom.local
 ```
 
-## Ghi chú nghiệp vụ trên giao diện
+## UI Business Rules
 
-- Instructor chỉ thấy student thuộc mình.
-- Khi instructor thêm student mới, student đó được gắn với instructor đang đăng nhập.
-- Student chỉ chat với instructor được gán cho mình.
-- Instructor có thể xem từng conversation theo student.
-- Lesson hiển thị theo dữ liệu thật trong Firebase, không gán cứng trên giao diện.
-- Những label kiểu `Active`, `Online`, `No recent message` đã bỏ nếu không có dữ liệu thật.
+- An instructor only sees students assigned to that instructor.
+- A newly added student is linked to the instructor who is currently logged in.
+- A student only chats with the assigned instructor.
+- An instructor can open each student conversation separately.
+- Lessons are rendered from Firebase data instead of hardcoded UI data.
+- Static labels such as `Active`, `Online`, and `No recent message` are not shown unless backed by real data.
+- The current frontend session is saved in `localStorage`, so refreshing the page keeps the user on the dashboard until logout.
 
-## Screenshot
+## Screenshots
 
-README ngoài cùng đang hiển thị ảnh từ thư mục `screenshots/`:
+The root README displays screenshots from the `screenshots/` folder:
 
 ```text
 screenshots/01-phone-login.png

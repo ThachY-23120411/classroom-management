@@ -1,8 +1,8 @@
 # Backend
 
-Backend được viết bằng Express. Phần này xử lý đăng nhập bằng mã truy cập, quản lý học sinh, giao lesson, gửi email/SMS và chat realtime bằng Socket.io.
+This is the Express backend for the Classroom Management application. It handles access-code authentication, student management, lesson assignment, Firebase persistence, SMS/email delivery, and realtime chat with Socket.io.
 
-## Công nghệ dùng trong backend
+## Tech Stack
 
 - Node.js
 - Express
@@ -13,17 +13,17 @@ Backend được viết bằng Express. Phần này xử lý đăng nhập bằn
 - Nodemailer
 - dotenv
 
-## Kiến trúc
+## Architecture
 
-Backend được chia theo kiểu Modular Monolith kết hợp Layered Architecture.
+The backend is organized as a Modular Monolith with layered modules.
 
-Luồng xử lý chính:
+Main request flow:
 
 ```text
 router -> controller -> service -> repository -> Firebase
 ```
 
-Ý tưởng là mỗi module tự giữ phần route, controller, service riêng. Controller chỉ nhận request/response. Service xử lý nghiệp vụ. Repository là nơi nói chuyện với Firestore.
+Each module owns its route, controller, service, and repository files. Controllers handle HTTP input/output, services contain business logic, and repositories talk to Firestore.
 
 ```text
 backend/
@@ -44,18 +44,16 @@ backend/
 `-- README.md
 ```
 
-## Cài đặt
-
-Vào thư mục backend rồi cài package:
+## Installation
 
 ```bash
 cd backend
 npm install
 ```
 
-## File `.env`
+## Environment Variables
 
-Tạo file `backend/.env`. Nội dung mẫu:
+Create `backend/.env`. You can copy the shape from `backend/.env.example`.
 
 ```env
 PORT=4000
@@ -77,44 +75,46 @@ EMAIL_PASS=your-email-app-password
 EMAIL_FROM=your-email@gmail.com
 ```
 
-Lưu ý: không đưa `.env` hoặc file service account Firebase lên GitHub.
+Do not commit `.env` or Firebase service account keys.
 
-## Chạy backend
+## Run Backend
+
+Development mode:
 
 ```bash
 npm run dev
 ```
 
-Backend chạy ở:
+Backend URL:
 
 ```text
 http://localhost:4000
 ```
 
-Nếu muốn chạy bằng lệnh start:
+Production-style start:
 
 ```bash
 npm run start
 ```
 
-## Seed dữ liệu
+## Seed Data
 
-Sau khi cấu hình Firebase xong, chạy:
+After Firebase is configured, run:
 
 ```bash
 npm run seed
 ```
 
-Seed sẽ tạo sẵn instructor, student, lesson và message thread để test giao diện.
+The seed script creates demo instructors, students, assigned lessons, and chat threads.
 
-Quan hệ dữ liệu đang dùng:
+Data relationship:
 
 ```text
-1 instructor quản lý nhiều student
-1 student chỉ thuộc về 1 instructor
+One instructor manages many students
+One student belongs to one instructor
 ```
 
-## Tài khoản demo
+## Demo Accounts
 
 Instructor:
 
@@ -148,7 +148,7 @@ Email: riley@classroom.local
 Phone: +15550000007
 ```
 
-## API chính
+## API Endpoints
 
 Base URL:
 
@@ -158,50 +158,50 @@ http://localhost:4000
 
 Auth:
 
-| Method | Endpoint | Ý nghĩa |
+| Method | Endpoint | Description |
 |---|---|---|
-| POST | `/createAccessCode` | Tạo mã đăng nhập theo số điện thoại |
-| POST | `/validateAccessCode` | Kiểm tra mã đăng nhập điện thoại |
-| POST | `/LoginEmail` | Tạo mã đăng nhập theo email student |
-| POST | `/validateEmailAccessCode` | Kiểm tra mã đăng nhập email |
+| POST | `/createAccessCode` | Create a phone access code |
+| POST | `/validateAccessCode` | Validate a phone access code |
+| POST | `/LoginEmail` | Create an email access code for a student |
+| POST | `/validateEmailAccessCode` | Validate a student email access code |
 
-Student và lesson:
+Students and lessons:
 
-| Method | Endpoint | Ý nghĩa |
+| Method | Endpoint | Description |
 |---|---|---|
-| POST | `/addStudent` | Instructor thêm student |
-| GET | `/students?instructorPhone=xxx` | Lấy student của instructor đang đăng nhập |
-| GET | `/student/:phone` | Xem chi tiết một student |
-| PUT | `/editStudent/:phone` | Sửa thông tin student |
-| DELETE | `/student/:phone` | Xóa student |
-| POST | `/assignLesson` | Giao lesson cho student |
-| GET | `/myLessons?phone=xxx` | Lấy lesson của student |
-| POST | `/markLessonDone` | Student đánh dấu lesson đã xong |
-| PUT | `/editProfile` | Student sửa profile |
+| POST | `/addStudent` | Add a student and link the student to an instructor |
+| GET | `/students?instructorPhone=xxx` | Get students managed by one instructor |
+| GET | `/student/:phone` | Get one student profile with lessons |
+| PUT | `/editStudent/:phone` | Update student information |
+| DELETE | `/student/:phone` | Delete a student |
+| POST | `/assignLesson` | Assign a lesson to a student |
+| GET | `/myLessons?phone=xxx` | Get lessons assigned to a student |
+| POST | `/markLessonDone` | Mark a lesson as completed |
+| PUT | `/editProfile` | Update a student profile |
 
 Chat:
 
-| Loại | Tên | Ý nghĩa |
+| Type | Name | Description |
 |---|---|---|
-| GET | `/chat/:studentPhone/messages` | Lấy lịch sử chat |
-| Socket event | `joinRoom` | Vào phòng chat của student |
-| Socket event | `sendMessage` | Gửi tin nhắn |
-| Socket event | `newMessage` | Nhận tin nhắn mới |
-| Socket event | `leaveRoom` | Rời phòng chat |
+| GET | `/chat/:studentPhone/messages` | Get chat history |
+| Socket event | `joinRoom` | Join a student's chat room |
+| Socket event | `sendMessage` | Send a message |
+| Socket event | `newMessage` | Receive a new message |
+| Socket event | `leaveRoom` | Leave a chat room |
 
-Chat được ràng buộc theo quan hệ instructor - student. Instructor chỉ chat đúng với student mà mình quản lý.
+Chat is scoped by instructor-student ownership. An instructor should only chat with students assigned to that instructor.
 
-## Ghi chú về Twilio
+## Twilio Trial Fallback
 
-Twilio trial có thể không gửi SMS được nếu số nhận chưa verify, chưa bật vùng gửi hoặc tài khoản bị giới hạn template.
+Twilio trial accounts can fail to send SMS if the recipient number is not verified, geo permissions are disabled, or trial messaging rules block the request.
 
-Vì vậy backend vẫn giữ đúng flow:
+The backend still keeps the expected flow:
 
 ```text
-tạo code -> lưu Firebase -> gọi Twilio -> nếu Twilio fail thì trả code về response để test local
+create code -> save code to Firebase -> try Twilio -> return a development code if Twilio fails
 ```
 
-Ví dụ response khi Twilio fail:
+Example response when SMS delivery fails:
 
 ```json
 {
@@ -217,12 +217,12 @@ Ví dụ response khi Twilio fail:
 }
 ```
 
-Phần fallback này chỉ dùng để test lúc làm bài. Khi dùng thật thì không nên trả `accessCode` ra response.
+This fallback is intended for local testing only. A production flow should not expose access codes in API responses.
 
-## Collection trong Firestore
+## Firestore Collections
 
-`users`: lưu instructor và student.
+`users`: instructors and students.
 
-`lessons`: lưu lesson đã giao.
+`lessons`: assigned lesson documents.
 
-`messages`: lưu thread chat theo student.
+`messages`: chat threads grouped by student.
