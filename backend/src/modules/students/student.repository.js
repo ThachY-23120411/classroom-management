@@ -67,6 +67,7 @@ async function findStudentByEmail(email) {
   };
 }
 
+
 async function createStudent(student) {
   await getUsersCollection().doc(student.phone).set(student);
 
